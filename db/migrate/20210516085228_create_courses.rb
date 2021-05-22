@@ -3,9 +3,9 @@ class CreateCourses < ActiveRecord::Migration[5.2]
     create_table :courses do |t|
       t.string :name, null: false
       t.references :category, foreign_key: true, index: true
-      t.decimal :price
+      t.decimal :price, precision: 20, scale: 2
       t.integer :currency
-      t.boolean :for_sale, index: true
+      t.boolean :for_sale, default: false, index: true
       t.integer :availability_period
       t.string :url
       t.text :description

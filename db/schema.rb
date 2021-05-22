@@ -21,9 +21,9 @@ ActiveRecord::Schema.define(version: 2021_05_16_085228) do
   create_table "courses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "category_id"
-    t.decimal "price", precision: 10
+    t.decimal "price", precision: 20, scale: 2
     t.integer "currency"
-    t.boolean "for_sale"
+    t.boolean "for_sale", default: false
     t.integer "availability_period"
     t.string "url"
     t.text "description"
