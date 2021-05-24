@@ -1,5 +1,6 @@
 module V1
   class Course < Base
+    before { authenticate_admin! }
     # index
     desc "回傳所有課程資訊" do
       success model: V1::Entities::CourseResult, examples: {
