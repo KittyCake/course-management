@@ -6,6 +6,7 @@ module V1
     helpers ::V1::Helpers
 
     mount Course
+    mount Order
 
     add_swagger_documentation(
       api_version: "v1", 

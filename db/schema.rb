@@ -45,6 +45,12 @@ ActiveRecord::Schema.define(version: 2021_05_23_082227) do
     t.bigint "course_id"
     t.decimal "price", precision: 20, scale: 2
     t.datetime "expiration_date"
+    t.string "credit_card_number"
+    t.integer "credit_card_valid_thru_y"
+    t.integer "credit_card_valid_thru_m"
+    t.integer "credit_card_verification"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_orders_on_course_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
