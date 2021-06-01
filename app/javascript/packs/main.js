@@ -6,10 +6,20 @@
 // All it does is render <div>Hello Vue</div> at the bottom of the page.
 
 import Vue from 'vue'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css';
 import App from '../app.vue'
+import Vuex from 'vuex'
+import router from '../src/router'
+import store from '../src/store'
+
+Vue.use(Vuex);
+Vue.use(ElementUI);
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({
+    router,
+    store,
     render: h => h(App)
   }).$mount()
   document.body.appendChild(app.$el)
