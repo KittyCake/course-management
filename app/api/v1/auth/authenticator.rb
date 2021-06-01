@@ -1,8 +1,7 @@
 module V1::Auth
   class Authenticator
-    def initialize(request, params)
+    def initialize(request)
       @request = request
-      @params = params
     end
 
     def authenticate!
@@ -11,11 +10,13 @@ module V1::Auth
     end
 
     def token
-      @token = ApiAccessToken.joins(:user).where(key: @params[:access_key]).first
+      @token = ApiAccessToken.joins(:user).where(
+        key: @request.env['HTTP_AUTHORIZATION']&.sub(/^Bearer /, '')
+      ).first
     end
 
     def check_token!
-      @params[:access_key] unless token
+      return @request.env['HTTP_AUTHORIZATION']&.sub(/^Bearer /, '') unless token
     end
   end
 end

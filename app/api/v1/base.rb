@@ -5,8 +5,10 @@ module V1
     include V1::ExceptionHandlers
     helpers ::V1::Helpers
 
+    mount User
     mount Course
     mount Order
+    mount Category
 
     add_swagger_documentation(
       api_version: "v1", 

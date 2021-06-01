@@ -38,6 +38,7 @@ gem "grape-entity"
 gem 'grape-swagger-entity'
 # user related
 gem 'devise'
+gem 'bcrypt'
 
 # --- Storage or database ---
 

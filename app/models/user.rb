@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :orders
   has_many :courses, through: :orders
+  has_many :api_access_tokens
 
   def orders_detail(options: {})
     related_orders = orders.includes(course: :category)
