@@ -63,7 +63,7 @@ module V1
       optional :price, type: Integer, default: 1, allow_blank: true
       optional :currency, type: String, default: 'TWD', allow_blank: true
       optional :for_sale, type: Boolean, default: :false, allow_blank: true
-      optional :availability_period, type: Integer, default: 30, allow_blank: true
+      optional :availability_period, type: Integer, default: 30, regexp: /^[1-4]{1}$/, allow_blank: true
       optional :url, type: String, default: '', allow_blank: true
       optional :description, type: String, default: '這個課程還沒有任何敘述', allow_blank: true
     end

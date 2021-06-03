@@ -1,7 +1,5 @@
 <template>
   <div>
-    <span>課程管理系統</span>
-
     <el-button
       type="primary"
       @click="dialog = true"
@@ -234,8 +232,8 @@
       editedItem: {
         name: '',
         price: 0,
-        currency: 1,
-        category_id: 0,
+        currency: 'TWD',
+        category_id: null,
         for_sale: false,
         url: '',
         description: '',
@@ -244,8 +242,8 @@
       defaultItem: {
         name: '',
         price: 0,
-        currency: 1,
-        category_id: 0,
+        currency: 'TWD',
+        category_id: null,
         for_sale: false,
         url: '',
         description: '',
