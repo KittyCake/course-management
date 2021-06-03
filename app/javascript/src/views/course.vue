@@ -313,7 +313,6 @@
         this.courses.splice(this.editedIndex, 1)
 
         courseFunc.deleteCourse(this.editedId).then(response => {
-            console.log(response.data);
           })
           .catch(e => {
             console.log(e);
@@ -339,7 +338,6 @@
         this.courses.push(this.editedItem)
 
         courseFunc.createCourse(newCourse).then(response => {
-            console.log(response.data);
           })
           .catch(e => {
             console.log(e);
@@ -351,7 +349,6 @@
         Object.assign(this.courses[this.editedIndex], this.editedItem)
 
         courseFunc.editCourse(this.editedId, this.editedItem).then(response => {
-            console.log(response.data);
           })
           .catch(e => {
             console.log(e);
