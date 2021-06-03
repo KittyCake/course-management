@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2 style="text-align: center;">課程管理系統</h2>
     <el-button
       type="primary"
       @click="dialog = true"
@@ -64,6 +65,7 @@
       <el-form
         ref="dataForm"
         :model="editedItem"
+        :rules="rules"
         label-position="left"
         label-width="30%"
         style="width: 90%; margin-left:50px;"
@@ -177,27 +179,31 @@
           is_sortable: false,
           can_edit: true,
           type: 'text',
+          is_required: true,
         },
         { 
           text: '價格', 
           key: 'price',
           can_edit: true,
           type: 'number',
+          is_required: true,
         },
         {
           text: '幣別',
           key: 'currency',
           can_edit: true,
           type: 'dropdown',
+          is_required: true,
         },
         {
           text: '類型',
           key: 'category_id',
           can_edit: true,
           type: 'dropdown',
+          is_required: true,
         },
         {
-          text: '上下架',
+          text: '上架',
           key: 'for_sale',
           can_edit: true,
           type: 'boolean',
@@ -207,6 +213,7 @@
           key: 'url',
           can_edit: true,
           type: 'text',
+          is_required: true,
         },
         {
           text: '描述',
@@ -217,6 +224,7 @@
         {
           text: '效期（天）',
           key: 'availability_period',
+          is_required: true,
           can_edit: true,
           type: 'number',
         },
@@ -231,28 +239,28 @@
       editedId: 0,
       editedItem: {
         name: '',
-        price: 0,
+        price: null,
         currency: 'TWD',
         category_id: null,
         for_sale: false,
         url: '',
         description: '',
-        availability_period: 0,
+        availability_period: null,
       },
       defaultItem: {
         name: '',
-        price: 0,
+        price: null,
         currency: 'TWD',
         category_id: null,
         for_sale: false,
         url: '',
         description: '',
-        availability_period: 0,
+        availability_period: null,
       },
       categoryList: [],
       currencyList: [],
+      rules: {},
     }),
-
     computed: {
       isEdit () {
         return this.editedIndex !== -1
@@ -269,13 +277,14 @@
     },
 
     created () {
-      this.initialize()
+      this.setTableData()
       this.getCategoryList()
       this.getCurrencyList()
+      this.createRules()
     },
 
     methods: {
-      initialize () {
+      setTableData() {
         return courseFunc.getCourseList().then(response => {
             // gem grape bug: decimal number becomes string in frontend
             this.courses = response.data.map((course) => {
@@ -284,7 +293,7 @@
             });
           })
           .catch(e => {
-            console.log(e);
+            alert(e.response.data.error.message)
           });
       },
       getCategoryList() {
@@ -315,7 +324,7 @@
         courseFunc.deleteCourse(this.editedId).then(response => {
           })
           .catch(e => {
-            console.log(e);
+            alert(e.response.data.error.message)
           });
 
         this.closeDelete()
@@ -334,27 +343,75 @@
           this.editedIndex = -1
         })
       },
-      createCourse() {
-        this.courses.push(this.editedItem)
-
-        courseFunc.createCourse(newCourse).then(response => {
+      async createCourse() {
+        const valid = await this.$refs['dataForm'].validate()
+        if(!valid) { return }
+        courseFunc.createCourse(this.editedItem).then(response => {
+            this.setTableData();
           })
           .catch(e => {
-            console.log(e);
+            alert(e.response.data.error.message)
           });
 
         this.close()
       },
-      updateCourse() {
-        Object.assign(this.courses[this.editedIndex], this.editedItem)
-
+      async updateCourse() {
+        const valid = await this.$refs['dataForm'].validate()
+        if(!valid) { return }
         courseFunc.editCourse(this.editedId, this.editedItem).then(response => {
+            this.setTableData();
           })
           .catch(e => {
-            console.log(e);
+            alert(e.response.data.error.message)
           });
 
         this.close()
+      },
+      createRules() {
+        const rules = {}
+        for (const column of this.columns) {
+          rules[column.key] = []
+          const rule = {}
+          if (column.type === 'dropdown' && column.is_required) {
+            rule.required = true
+            rule.message = `${column.text} is required`
+            rule.trigger = 'change'
+            rules[column.key].push(rule)
+          } else if (column.type === 'number' && column.is_required) {
+            rule.required = true
+            rule.trigger = 'blur'
+            rule.validator = (rule, value, callback) => {
+              if (value === null) {
+                callback(new Error(`${column.text} is required`))
+              } else if (isNaN(Number(value)) || Number(value) === 0) {
+                callback(new Error('請輸入大於 0 的數字'))
+              } else {
+                callback()
+              }
+            }
+            rules[column.key].push(rule)
+          } else if (column.key === 'url' && column.is_required) {
+            rule.required = true
+            rule.trigger = 'blur'
+            rule.validator = (rule, value, callback) => {
+              const reg = /(www|http:|https:)+\/\/[^\s]+/
+              if (value === null) {
+                callback(new Error(`${column.text} is required`))
+              } else if (!reg.test(value)) {
+                callback(new Error('請輸入有效的網址'))
+              } else {
+                callback()
+              }
+            }
+            rules[column.key].push(rule)
+          } else if (column.is_required) {
+            rule.required = true
+            rule.message = `${column.text} is required`
+            rule.trigger = 'blur'
+            rules[column.key].push(rule)
+          }
+        }
+        this.rules = rules
       },
     },
   }
