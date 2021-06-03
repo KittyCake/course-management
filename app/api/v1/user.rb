@@ -1,7 +1,9 @@
 module V1
   class User < Base
     before do
-      authenticate! unless @env['PATH_INFO'].include?('login')
+      unless @env['PATH_INFO'].include?('login') || @env['PATH_INFO'].include?('logout')
+        authenticate!
+      end
     end
 
     # 登入
@@ -45,14 +47,13 @@ module V1
     end
 
     post '/users/logout' do
-      user = current_user
-      raise "無法找到此使用者" if !user
+      raise "無法找到此使用者" if !current_user
 
-      ApiAccessToken.where(user_id: user.id).destroy_all
+      ApiAccessToken.where(user_id: current_user.id).destroy_all
 
       result = {
-        id: user.id,
-        email: user.email,
+        id: current_user.id,
+        email: current_user.email,
       }
 
       present result
