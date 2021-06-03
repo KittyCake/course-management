@@ -77,7 +77,6 @@ export default {
         alert('帳號或密碼不能為空');
       } else {
         userFunc.login(_this.loginForm).then(res => {
-          console.log(res.data);
           const reponse = res.data;
           _this.userToken = reponse.token;
           _this.userLogin({ 

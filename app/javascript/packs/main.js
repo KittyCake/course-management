@@ -7,7 +7,6 @@
 
 import Vue from 'vue'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css';
 import App from '../app.vue'
 import Vuex from 'vuex'
 import router from '../src/router'
@@ -23,8 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     render: h => h(App)
   }).$mount()
   document.body.appendChild(app.$el)
-
-  console.log(app)
 })
 
 
