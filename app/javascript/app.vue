@@ -21,7 +21,6 @@ import { mapMutations } from 'vuex';
 export default {
   computed: {
     isLogin() {
-      console.log(this.$route.path)
       return this.$route.path === '/login'
     },
   },
