@@ -5,7 +5,8 @@ module V1
     end
 
     # 登入
-    desc "login"
+    desc "login" do
+    end
 
     params do
       requires :email, type: String, allow_blank: false
@@ -36,7 +37,8 @@ module V1
     end
 
     # 登出
-    desc "logout"
+    desc "logout" do
+    end
 
     params do
       # requires :id, type: Integer, allow_blank: false
@@ -57,7 +59,7 @@ module V1
     end
 
     # index
-    desc "回傳所有使用者資訊", hidden: true do
+    desc "回傳所有使用者資訊" do
       success model: V1::Entities::UserResult, examples: {
         "application/json": {
           results: [
@@ -74,7 +76,7 @@ module V1
       ]
     end
 
-    get '/users' do
+    get '/users', hidden: true do
       authenticate_admin!
       users = ::User.all
       present users.pluck(:id, :email)
@@ -152,7 +154,7 @@ module V1
     end
     
     # delete
-    desc "永久刪除一個使用者", hidden: true do
+    desc "永久刪除一個使用者" do
       success model: V1::Entities::UserResult, examples: {
         "application/json": {
           results: [
@@ -171,7 +173,7 @@ module V1
     params do
       requires :id, type: Integer, allow_blank: false
     end
-    delete '/users/:id' do
+    delete '/users/:id', hidden: true do
       authenticate_admin!
       user = ::User.find_by(id: params[:id])
       user.destroy

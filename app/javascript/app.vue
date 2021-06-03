@@ -1,12 +1,13 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header v-if="userId">
-        <el-button type='primary' @click="logoutBtn">
-          登出
-        </el-button>
+      <el-header v-if="!isLogin">
+        <h2 id="app-title">課程管理系統</h2>
       </el-header>
       <el-main>
+        <el-button type='warning' @click="logoutBtn" style="float: right;">
+          登出
+        </el-button>
         <router-view />
       </el-main>
     </el-container>
@@ -19,9 +20,9 @@ import { mapMutations } from 'vuex';
 
 export default {
   computed: {
-    userId() {
-      console.log(this.$store.state.userId)
-      return this.$store.state.userId
+    isLogin() {
+      console.log(this.$route.path)
+      return this.$route.path === '/login'
     },
   },
   methods: {
@@ -39,9 +40,8 @@ export default {
 }
 </script>
 
-<style scoped>
-p {
-  font-size: 2em;
+<style lang="scss" scoped>
+#app-title {
   text-align: center;
 }
 </style>
